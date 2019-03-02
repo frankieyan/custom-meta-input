@@ -1,0 +1,25 @@
+import * as metaHelpers from './meta.helpers'
+
+describe('Meta helpers', () => {
+  describe('removeMetaAtGivenIndex', () => {
+    test('returns the given string without the meta if the given index is part of the meta', () => {
+      expect(metaHelpers.removeMetaAtGivenIndex('abc {{type__value}}', 4)).toBe('abc ')
+      expect(metaHelpers.removeMetaAtGivenIndex('abc {{type__value}}', 5)).toBe('abc ')
+      expect(metaHelpers.removeMetaAtGivenIndex('abc {{type__value}}', 6)).toBe('abc ')
+      expect(metaHelpers.removeMetaAtGivenIndex('abc {{type__value}}', 7)).toBe('abc ')
+      expect(metaHelpers.removeMetaAtGivenIndex('abc {{type__value}}', 8)).toBe('abc ')
+
+      expect(metaHelpers.removeMetaAtGivenIndex('abc {{type__value}}', 16)).toBe('abc ')
+      expect(metaHelpers.removeMetaAtGivenIndex('abc {{type__value}}', 17)).toBe('abc ')
+      expect(metaHelpers.removeMetaAtGivenIndex('abc {{type__value}}', 18)).toBe('abc ')
+    })
+
+    test('returns false if the given index is not part of a meta', () => {
+      expect(metaHelpers.removeMetaAtGivenIndex('abc {{type__value}}', 0)).toBe('abc {{type__value}}')
+      expect(metaHelpers.removeMetaAtGivenIndex('abc {{type__value}}', 1)).toBe('abc {{type__value}}')
+      expect(metaHelpers.removeMetaAtGivenIndex('abc {{type__value}}', 2)).toBe('abc {{type__value}}')
+      expect(metaHelpers.removeMetaAtGivenIndex('abc {{type__value}}', 3)).toBe('abc {{type__value}}')
+      expect(metaHelpers.removeMetaAtGivenIndex('abcdef', 4)).toBe('abcdef')
+    })
+  })
+})

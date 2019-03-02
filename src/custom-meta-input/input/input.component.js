@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { removeMetaAtGivenIndex } from '../helpers/meta.helpers'
+import { removeMetaAtGivenIndex, splitTextMetaNodes } from '../helpers/meta.helpers'
+import { Pill } from './pill.component'
 
 const TextInput = styled.div`
   box-sizing: border-box;
@@ -21,6 +22,10 @@ const TextInput = styled.div`
     outline: 0;
     border-color: lightblue;
   }
+`
+
+const TextNode = styled.span`
+  margin-right: 4px;
 `
 
 const Input = ({ value, onChange }) => {
@@ -59,7 +64,15 @@ const Input = ({ value, onChange }) => {
       tabIndex="0"
       onKeyDown={handleInputKeyDown}
     >
-      {value}
+      {
+        splitTextMetaNodes(value).map((node, index) => {
+          const { type, value: nodeValue } = node
+
+          return typeof node === 'object'
+            ? <Pill key={index} type={type} value={nodeValue} />
+            : <TextNode key={index}>{node}</TextNode>
+        })
+      }
     </TextInput>
   )
 }

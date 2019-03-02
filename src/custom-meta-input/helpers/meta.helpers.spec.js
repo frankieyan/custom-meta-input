@@ -22,4 +22,31 @@ describe('Meta helpers', () => {
       expect(metaHelpers.removeMetaAtGivenIndex('abcdef', 4)).toBe('abcdef')
     })
   })
+
+  describe('splitTextMetaNodes', () => {
+    describe('when the meta string is at the end of the given string', () => {
+      test('able to split the given string into array of text values and metas', () => {
+        expect(metaHelpers.splitTextMetaNodes('abc {{type__value}}')).toEqual(['abc ', '{{type__value}}'])
+      })
+    })
+
+    describe('when the meta string is at the beginning of the given string', () => {
+      test('able to split the given string into array of text values and metas', () => {
+        expect(metaHelpers.splitTextMetaNodes('{{type__value}} abc')).toEqual(['{{type__value}}', ' abc'])
+      })
+    })
+
+    describe('when there are multiple meta strings', () => {
+      test('able to split the given string into array of text values and metas', () => {
+        expect(metaHelpers.splitTextMetaNodes('{{type__value}} abc {{type__value}}{{type__value}}abc'))
+          .toEqual([
+            '{{type__value}}',
+            ' abc ',
+            '{{type__value}}',
+            '{{type__value}}',
+            'abc',
+          ])
+      })
+    })
+  })
 })

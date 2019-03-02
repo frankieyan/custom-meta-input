@@ -21,6 +21,37 @@ function removeMetaAtGivenIndex(value, index) {
   return value.slice(0, start) + value.slice(end + 1)
 }
 
+function splitTextMetaNodes(value) {
+  function findNextTextMetaNode(accumulator, source) {
+    if (source.length === 0) {
+      return accumulator
+    }
+
+    const start = _lookupBrace(source, '{', 0)
+    const end = _lookupBrace(source, '}', 0)
+
+    if (typeof start !== 'number' || typeof end !== 'number') {
+      return findNextTextMetaNode([
+          ...accumulator.slice(0, -1),
+          (accumulator[accumulator.length - 1] || '') + source[0],
+        ],
+        source.slice(1)
+      )
+    }
+    return findNextTextMetaNode([
+        ...accumulator,
+        source.slice(start, end + 1).join(''),
+        '',
+      ],
+      source.slice(end + 1)
+    )
+  }
+
+  return findNextTextMetaNode([], value.split(''))
+    .filter(node => node !== '')
+}
+
 export {
   removeMetaAtGivenIndex,
+  splitTextMetaNodes,
 }

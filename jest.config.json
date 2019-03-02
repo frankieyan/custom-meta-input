@@ -1,0 +1,5 @@
+{
+  "verbose": true,
+  "restoreMocks": true,
+  "resetModules": true
+}

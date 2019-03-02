@@ -10,6 +10,14 @@ function _lookupBrace(value, brace, currentIndex) {
     : (currentIndexIsPartOfBrace && currentIndex) || _lookupBrace(value, brace, nextIndex)
 }
 
+function _parseMeta(meta) {
+  const parsedParts = meta
+    .replace(/{|}/g, '')
+    .split('__')
+
+  return { type: parsedParts[0], value: parsedParts[1] }
+}
+
 function removeMetaAtGivenIndex(value, index) {
   const start = _lookupBrace(value, '{', index)
   const end = _lookupBrace(value, '}', index)
@@ -35,15 +43,15 @@ function splitTextMetaNodes(value) {
           ...accumulator.slice(0, -1),
           (accumulator[accumulator.length - 1] || '') + source[0],
         ],
-        source.slice(1)
+        source.slice(1),
       )
     }
     return findNextTextMetaNode([
         ...accumulator,
-        source.slice(start, end + 1).join(''),
+        _parseMeta(source.slice(start, end + 1).join('')),
         '',
       ],
-      source.slice(end + 1)
+      source.slice(end + 1),
     )
   }
 

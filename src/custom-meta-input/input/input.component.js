@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import { removeMetaAtGivenIndex } from '../helpers/meta.helpers'
 
 const TextInput = styled.div`
   box-sizing: border-box;
@@ -44,7 +45,13 @@ const Input = ({ value, onChange }) => {
   }
 
   function handleDeleteText() {
-    onChange(value.slice(0, -1))
+    const valueWithoutMeta = removeMetaAtGivenIndex(value, value.length - 1)
+
+    onChange(
+      value === valueWithoutMeta
+        ? value.slice(0, -1)
+        : valueWithoutMeta
+    )
   }
 
   return (

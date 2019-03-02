@@ -17,17 +17,25 @@ const MetaMenu = styled.ul`
 const MetaMenuItem = styled.li`
   border-bottom: 1px solid lightgrey;
   padding: 8px;
+  cursor: pointer;
 
   &:last-child {
     border-bottom: 0;
   }
 `
 
-const Menu = ({ open }) => (
+const Menu = ({ open, onSelect, meta = [] }) => (
   <MetaMenu open={open}>
-    <MetaMenuItem>Artist name Commodores</MetaMenuItem>
-    <MetaMenuItem>Song title Thank you</MetaMenuItem>
-    <MetaMenuItem>Rating 5</MetaMenuItem>
+    {
+      meta.map(({ type, value }, index) => (
+        <MetaMenuItem
+          key={index}
+          onClick={() => onSelect(`{{${type}__${value}}}`)}
+        >
+          {type} {value}
+        </MetaMenuItem>
+      ))
+    }
   </MetaMenu>
 )
 

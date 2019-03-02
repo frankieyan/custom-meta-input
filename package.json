@@ -1,0 +1,24 @@
+{
+  "name": "custom-meta-input",
+  "version": "1.0.0",
+  "description": "An input component largely inspired by Zapier's setup flow",
+  "main": "src/index.js",
+  "author": "Frankie Yan <frankieyan@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^16.8.3",
+    "styled-components": "^4.1.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@storybook/addon-actions": "^4.1.13",
+    "@storybook/addon-links": "^4.1.13",
+    "@storybook/addons": "^4.1.13",
+    "@storybook/react": "^4.1.13",
+    "babel-loader": "^8.0.5"
+  },
+  "scripts": {
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  }
+}

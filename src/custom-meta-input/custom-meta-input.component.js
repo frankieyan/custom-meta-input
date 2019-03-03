@@ -11,25 +11,26 @@ const InputContainer = styled.div`
   font-size: 14px;
 `
 
-const meta = [
-  { type: 'Artist name', value: 'Commodores' },
-  { type: 'Song title', value: 'Thank you' },
-  { type: 'Rating', value: 5 },
-]
-
-const CustomMetaInput = props => {
+const CustomMetaInput = ({ metaOptions = [], onChange = () => undefined }) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [value = '', setValue] = useState()
 
   function handleSelect(entry) {
-    setValue(value + entry)
+    const newValue = value + entry
+    setValue(newValue)
+    onChange(newValue)
+  }
+
+  function handleInput(newValue) {
+    setValue(newValue)
+    onChange(newValue)
   }
 
   return (
     <InputContainer>
-      <Input value={value} onChange={value => setValue(value)}/>
+      <Input value={value} onChange={handleInput}/>
       <MenuButton onClick={() => setMenuOpen(!menuOpen)} />
-      <Menu open={menuOpen} meta={meta} onSelect={handleSelect}/>
+      <Menu open={menuOpen} meta={metaOptions} onSelect={handleSelect}/>
     </InputContainer>
   )
 }

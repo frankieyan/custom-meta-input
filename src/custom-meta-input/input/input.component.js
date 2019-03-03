@@ -26,6 +26,7 @@ const TextInput = styled.div`
 
 const TextNode = styled.span`
   margin-right: 4px;
+  white-space: nowrap;
 `
 
 const Input = ({ value, onChange }) => {

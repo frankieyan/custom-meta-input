@@ -1,7 +1,13 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
+import React from 'react'
+import styled, { keyframes } from 'styled-components'
 import { removeMetaAtGivenIndex, splitTextMetaNodes } from '../helpers/meta.helpers'
 import { Pill } from './pill.component'
+
+const caretAnimation = keyframes`
+  0% { visibility: visible; }
+  50% { visibility: hidden; }
+  100% { visibility: hidden; }
+`
 
 const TextInput = styled.div`
   box-sizing: border-box;
@@ -17,16 +23,29 @@ const TextInput = styled.div`
   border-radius: 4px 0 0 4px;
   font-family: arial, sans-serif;
   font-size: 14px;
+  cursor: text;
 
   &:focus {
     outline: 0;
     border-color: lightblue;
+
+    &:after {
+      content: '';
+      height: 14px;
+      width: 1px;
+      background: black;
+
+      animation: ${caretAnimation} 1s linear infinite;
+    }
   }
 `
 
 const TextNode = styled.span`
-  margin-right: 4px;
   white-space: nowrap;
+
+  :not(:last-child) {
+    margin-right: 4px;
+  }
 `
 
 const Input = ({ value, onChange }) => {

@@ -10,12 +10,15 @@ const Pill = styled(({ type, value, className }) => (
 ))`
   display: inline-block;
   padding: 2px 8px;
-  margin-right: 4px;
   border: 2px solid ${({ type, value }) => (!type || !value) ? 'red' : 'green'};
   border-radius: 16px;
   color: white;
   background: ${({ type, value }) => (!type || !value) ? 'red' : 'green'};
   white-space: nowrap;
+
+  :not(:last-child) {
+    margin-right: 4px;
+  }
 
   span:not(:empty) + strong:not(:empty) {
     margin-left: 8px;

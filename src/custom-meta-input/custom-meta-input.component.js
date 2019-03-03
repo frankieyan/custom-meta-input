@@ -7,11 +7,12 @@ import { Input } from './input/input.component'
 const InputContainer = styled.div`
   display: flex;
   position: relative;
+  width: 100%;
   font-family: arial, sans-serif;
   font-size: 14px;
 `
 
-const CustomMetaInput = ({ metaOptions = [], onChange = () => undefined }) => {
+const CustomMetaInput = ({ metaOptions = [], onChange = () => undefined, className }) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [value = '', setValue] = useState()
 
@@ -27,7 +28,7 @@ const CustomMetaInput = ({ metaOptions = [], onChange = () => undefined }) => {
   }
 
   return (
-    <InputContainer>
+    <InputContainer className={className}>
       <Input value={value} onChange={handleInput}/>
       <MenuButton onClick={() => setMenuOpen(!menuOpen)} />
       <Menu open={menuOpen} meta={metaOptions} onSelect={handleSelect}/>

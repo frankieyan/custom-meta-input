@@ -4,8 +4,7 @@ import styled from 'styled-components'
 const MetaMenu = styled.ul`
   position: absolute;
   display: ${({ open }) => open ? 'block' : 'none'};
-  min-width: 280px;;
-  max-width: 100%;
+  width: 100%;
   min-height: 120px;
   top: 48px;
   padding: 0;

@@ -6,8 +6,8 @@ import { Pill } from './pill.component'
 const TextInput = styled.div`
   box-sizing: border-box;
   display: flex;
+  flex: 1;
   align-items: center;
-  width: 240px;
   height: 40px;
   padding: 0 8px;
   overflow: auto;

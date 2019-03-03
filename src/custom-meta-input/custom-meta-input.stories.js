@@ -1,8 +1,15 @@
 import React from 'react'
+import styled from 'styled-components'
 import { storiesOf } from '@storybook/react'
 import { withKnobs, object } from '@storybook/addon-knobs'
 import { action } from '@storybook/addon-actions';
 import { CustomMetaInput } from './custom-meta-input.component'
+
+const InputContainer = styled.section`
+  display: flex;
+  margin: 40px 80px;
+  justify-content: center;
+`
 
 storiesOf('Custom Meta Input', module)
   .addDecorator(withKnobs)
@@ -14,7 +21,9 @@ storiesOf('Custom Meta Input', module)
     ])
 
     return (
-      <CustomMetaInput metaOptions={metaOptions} onChange={action('onChange')} />
+      <InputContainer>
+        <CustomMetaInput metaOptions={metaOptions} onChange={action('onChange')} />
+      </InputContainer>
     )
   }
 )

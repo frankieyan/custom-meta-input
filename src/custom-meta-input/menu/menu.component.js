@@ -29,20 +29,35 @@ const MetaMenuItem = styled.li`
   }
 `
 
-const Menu = ({ open, onSelect, meta = [] }) => (
-  <MetaMenu open={open}>
-    {
-      meta.map(({ type, value }, index) => (
-        <MetaMenuItem
-          key={index}
-          tabIndex="0"
-          onClick={() => onSelect(`{{${type}__${value}}}`)}
-        >
-          {type} <strong>{value}</strong>
-        </MetaMenuItem>
-      ))
+const Menu = ({ open, onSelect, meta = [] }) => {
+  function handleSelect({ type, value }) {
+    return () => onSelect(`{{${type}__${value}}}`)
+  }
+
+  function handleKeyUp({ type, value }) {
+    return event => {
+      if (event.key === 'Enter') {
+        onSelect(`{{${type}__${value}}}`)
+      }
     }
-  </MetaMenu>
-)
+  }
+
+  return (
+    <MetaMenu open={open}>
+      {
+        meta.map(({ type, value }, index) => (
+          <MetaMenuItem
+            key={index}
+            tabIndex="0"
+            onClick={handleSelect({ type, value })}
+            onKeyUp={handleKeyUp({ type, value })}
+          >
+            {type} <strong>{value}</strong>
+          </MetaMenuItem>
+        ))
+      }
+    </MetaMenu>
+  )
+}
 
 export { Menu }

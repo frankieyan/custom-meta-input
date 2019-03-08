@@ -1,0 +1,6 @@
+language: node_js
+node_js:
+  - "lts/*"
+cache: yarn
+install: "yarn install --frozen-lockfile"
+script: "yarn ci"

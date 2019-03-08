@@ -31,6 +31,6 @@
     "build": "rollup -c",
     "test": "jest",
     "watch-test": "jest --watch",
-    "ci": "yarn test"
+    "ci": "yarn build && yarn test"
   }
 }

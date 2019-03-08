@@ -2,7 +2,8 @@
   "name": "custom-meta-input",
   "version": "1.0.0",
   "description": "An input component largely inspired by Zapier's setup flow",
-  "main": "src/index.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
   "author": "Frankie Yan <frankieyan@gmail.com>",
   "license": "MIT",
   "dependencies": {
@@ -27,6 +28,7 @@
   "scripts": {
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
+    "build": "rollup -c",
     "test": "jest",
     "watch-test": "jest --watch",
     "ci": "yarn test"

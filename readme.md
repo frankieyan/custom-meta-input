@@ -1,4 +1,4 @@
-![CI](https://travis-ci.org/frankieyan/custom-meta-input.svg?branch=master)
+[![Build Status](https://travis-ci.org/frankieyan/custom-meta-input.svg?branch=master)](https://travis-ci.org/frankieyan/custom-meta-input)
 
 # Custom Meta Input Component
 Not the most creative name around, but this is a component largely inspired by Zapier's input component when editing a Zap, which allows you to create templates to be populated with data from different integrations you've connected to.

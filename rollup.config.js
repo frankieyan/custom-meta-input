@@ -12,4 +12,8 @@ export default {
       exclude: ['node_modules/**'],
     })
   ],
+  external: [
+    ...Object.keys(packageJson.dependencies || {}),
+    ...Object.keys(packageJson.peerDependencies || {}),
+  ],
 }

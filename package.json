@@ -24,6 +24,8 @@
   "scripts": {
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "watch-test": "jest --watch"
+    "test": "jest",
+    "watch-test": "jest --watch",
+    "ci": "yarn test"
   }
 }

@@ -13,6 +13,7 @@
     "prebuild": "rimraf dist",
     "build": "rollup -c",
     "test": "jest",
+    "test:watch": "yarn test --watch",
     "clean:coverage": "rimraf coverage",
     "test:coverage": "yarn clean:coverage && yarn test --coverage",
     "test:coverage:coveralls": "yarn test:coverage --ci --coverageReporters=text-lcov | coveralls",

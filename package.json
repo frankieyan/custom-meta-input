@@ -14,7 +14,7 @@
     "build": "rollup -c",
     "test": "jest",
     "watch-test": "jest --watch",
-    "ci": "yarn build && yarn test",
+    "ci": "yarn build && yarn test --ci --coverage",
     "prepublishOnly": "yarn build"
   },
   "peerDependencies": {

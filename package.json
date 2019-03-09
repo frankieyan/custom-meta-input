@@ -34,6 +34,7 @@
     "@storybook/storybook-deployer": "^2.8.1",
     "babel-jest": "^24.1.0",
     "babel-loader": "^8.0.5",
+    "coveralls": "^3.0.3",
     "jest": "^24.1.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",

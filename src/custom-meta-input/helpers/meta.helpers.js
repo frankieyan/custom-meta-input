@@ -29,7 +29,7 @@ function removeMetaAtGivenIndex(value, index) {
   return value.slice(0, start) + value.slice(end + 1)
 }
 
-function splitTextMetaNodes(value) {
+function splitTextMetaNodes(value = '') {
   function findNextTextMetaNode(accumulator, source) {
     if (source.length === 0) {
       return accumulator

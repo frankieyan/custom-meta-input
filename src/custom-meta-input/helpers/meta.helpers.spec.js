@@ -26,13 +26,15 @@ describe('Meta helpers', () => {
   describe('splitTextMetaNodes', () => {
     describe('when the meta string is at the end of the given string', () => {
       test('able to split the given string into array of text values and metas', () => {
-        expect(metaHelpers.splitTextMetaNodes('abc {{type__value}}')).toEqual(['abc ', { type: 'type', value: 'value' }])
+        expect(metaHelpers.splitTextMetaNodes('abc {{type__value}}'))
+          .toEqual(['abc ', { type: 'type', value: 'value' }])
       })
     })
 
     describe('when the meta string is at the beginning of the given string', () => {
       test('able to split the given string into array of text values and metas', () => {
-        expect(metaHelpers.splitTextMetaNodes('{{type__value}} abc')).toEqual([{ type: 'type', value: 'value' }, ' abc'])
+        expect(metaHelpers.splitTextMetaNodes('{{type__value}} abc'))
+          .toEqual([{ type: 'type', value: 'value' }, ' abc'])
       })
     })
 
@@ -46,6 +48,12 @@ describe('Meta helpers', () => {
             { type: 'type', value: 'value' },
             'abc',
           ])
+      })
+    })
+
+    describe('when an input is not provided', () => {
+      test('returns an empty array', () => {
+        expect(metaHelpers.splitTextMetaNodes()).toEqual([])
       })
     })
   })

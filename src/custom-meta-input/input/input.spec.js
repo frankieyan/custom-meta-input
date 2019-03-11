@@ -79,5 +79,13 @@ describe('<Input> component', () => {
       fireEvent.keyDown(container.firstChild, { key: '0' })
       expect(handler).lastCalledWith('I\'m feeling good0')
     })
+
+    test('spaces are added', () => {
+      const handler = jest.fn()
+      const { container } = render(<Input value="I'm feeling good" onChange={handler} />)
+
+      fireEvent.keyDown(container.firstChild, { key: ' ' })
+      expect(handler).lastCalledWith('I\'m feeling good ')
+    })
   })
 })

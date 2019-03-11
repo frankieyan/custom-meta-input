@@ -4,6 +4,7 @@ module.exports = {
   resetModules: true,
   collectCoverageFrom: [
     "src/**/*.js",
+    "!src/**/*.stories.js",
     "!**/node_modules/**",
   ],
   setupFilesAfterEnv: [

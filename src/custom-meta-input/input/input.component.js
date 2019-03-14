@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { removeMetaAtGivenIndex, splitTextMetaNodes } from '../helpers/meta.helpers'
 import { Pill } from './pill.component'
@@ -84,18 +84,34 @@ const Input = ({ value, onChange }) => {
     )
   }
 
+  function handleSelection() {
+    // TODO: Retrieve selected nodes and partial text here
+  }
+
+  const textMetaNodes = splitTextMetaNodes(value)
+
+  const currentTextMetaNodeRefs = useRef([]).current
+  currentTextMetaNodeRefs.splice(0, currentTextMetaNodeRefs.length)
+
   return (
     <TextInput
       tabIndex="0"
       onKeyDown={handleInputKeyDown}
+      onMouseUp={handleSelection}
+      onDoubleClick={handleSelection}
     >
       {
-        splitTextMetaNodes(value).map((node, index) => {
+        textMetaNodes.map((node, index) => {
           const { type, value: nodeValue } = node
+          const setRef = type => instance => {
+            if (instance !== null) {
+              currentTextMetaNodeRefs.push({ type, instance })
+            }
+          }
 
           return typeof node === 'object'
-            ? <Pill key={index} type={type} value={nodeValue} />
-            : <TextNode key={index}>{node}</TextNode>
+            ? <Pill key={index} type={type} value={nodeValue} data-pill-element ref={setRef('meta')} />
+            : <TextNode key={index} data-text-node-element ref={setRef('text')}>{node}</TextNode>
         })
       }
     </TextInput>

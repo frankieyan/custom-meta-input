@@ -1,13 +1,12 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import styled from 'styled-components'
 
-
-const Pill = styled(({ type, value, className }) => (
-  <span className={className}>
+const Pill = styled(forwardRef(({ type, value, className, ...rest }, ref) => (
+  <span className={className} ref={ref} {...rest}>
     <span>{type}</span>
     <strong>{value}</strong>
   </span>
-))`
+)))`
   display: inline-block;
   padding: 2px 8px;
   border: 2px solid ${({ type, value }) => (!type || !value) ? 'red' : 'green'};

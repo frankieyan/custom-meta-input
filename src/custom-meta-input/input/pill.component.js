@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react'
 import styled from 'styled-components'
 
-const Pill = styled(forwardRef(({ type, value, className, ...rest }, ref) => (
+const Pill = styled(forwardRef(({ type, value, className, selected, ...rest }, ref) => (
   <span className={className} ref={ref} {...rest}>
     <span>{type}</span>
     <strong>{value}</strong>
@@ -14,6 +14,17 @@ const Pill = styled(forwardRef(({ type, value, className, ...rest }, ref) => (
   color: white;
   background: ${({ type, value }) => (!type || !value) ? 'red' : 'green'};
   white-space: nowrap;
+
+  ${({ selected, type, value }) => selected
+    ? `
+      background-color: ${(!type || !value) ? 'lightcoral' : 'lightgreen'};
+    `
+    : ''
+  }
+
+  > *::selection {
+    display: none;
+  }
 
   :not(:last-child) {
     margin-right: 4px;

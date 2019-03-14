@@ -1,6 +1,6 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import styled, { keyframes } from 'styled-components'
-import { removeMetaAtGivenIndex, splitTextMetaNodes } from '../helpers/meta.helpers'
+import { removeMetaAtGivenIndex, splitTextMetaNodes, parseSelection, getElementsBetween } from '../helpers/meta.helpers'
 import { Pill } from './pill.component'
 
 const caretAnimation = keyframes`
@@ -84,10 +84,31 @@ const Input = ({ value, onChange }) => {
     )
   }
 
-  function handleSelection() {
-    // TODO: Retrieve selected nodes and partial text here
+  function handleClearSelection() {
+    if (!window.getSelection) {
+      return
+    }
+
+    window.getSelection().removeAllRanges()
   }
 
+  function handleSelection() {
+    if (!window.getSelection || window.getSelection().isCollapsed) {
+      return setSelectedIndexes([])
+    }
+
+    const selection = window.getSelection()
+    const { anchorNode, focusNode } = selection
+    const selectedText = selection.toString()
+
+    const { anchor, focus } = parseSelection({ anchorNode, focusNode })
+    const currentSelectedElements = getElementsBetween({ start: anchor, end: focus, list: currentTextMetaNodeRefs })
+    const currentSelectedIndexes = currentSelectedElements.map(selected => currentTextMetaNodeRefs.indexOf(selected))
+
+    setSelectedIndexes(currentSelectedIndexes)
+  }
+
+  const [selectedIndexes, setSelectedIndexes] = useState([])
   const textMetaNodes = splitTextMetaNodes(value)
 
   const currentTextMetaNodeRefs = useRef([]).current
@@ -97,21 +118,23 @@ const Input = ({ value, onChange }) => {
     <TextInput
       tabIndex="0"
       onKeyDown={handleInputKeyDown}
+      onMouseDown={handleClearSelection}
       onMouseUp={handleSelection}
       onDoubleClick={handleSelection}
     >
       {
         textMetaNodes.map((node, index) => {
           const { type, value: nodeValue } = node
-          const setRef = type => instance => {
-            if (instance !== null) {
-              currentTextMetaNodeRefs.push({ type, instance })
+          const setRef = ref => {
+            if (ref !== null) {
+              currentTextMetaNodeRefs.push(ref)
             }
           }
+          const isSelected = selectedIndexes.includes(index)
 
           return typeof node === 'object'
-            ? <Pill key={index} type={type} value={nodeValue} data-pill-element ref={setRef('meta')} />
-            : <TextNode key={index} data-text-node-element ref={setRef('text')}>{node}</TextNode>
+            ? <Pill key={index} type={type} value={nodeValue} data-pill-element ref={setRef} selected={isSelected} />
+            : <TextNode key={index} data-text-node-element ref={setRef}>{node}</TextNode>
         })
       }
     </TextInput>

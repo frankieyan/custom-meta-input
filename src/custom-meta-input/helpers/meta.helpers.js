@@ -59,7 +59,54 @@ function splitTextMetaNodes(value = '') {
     .filter(node => node !== '')
 }
 
+/**
+ * Recursively find the top-level Pill or TextNode element that the current selected element belongs to
+ * @param {Element} element
+ * @returns {Element}
+ */
+function _findPillOrTextNode(element) {
+  if (element.hasAttribute && element.hasAttribute('data-input-element') || !element.parentElement) {
+    return
+  }
+
+  return element.hasAttribute && (element.hasAttribute('data-pill-element') || element.hasAttribute('data-text-node-element'))
+    ? element
+    : _findPillOrTextNode(element.parentElement)
+}
+
+/**
+ * Returns the Pill or TextNode elements at the beginning (anchor) and end (focus) of the selection
+ *
+ * @param {{ anchorNode: Element, focusNode: Element }} param0
+ * @returns {{ anchor: Element, focus: Element }}
+ */
+function parseSelection({ anchorNode, focusNode }) {
+  return {
+    anchor: _findPillOrTextNode(anchorNode),
+    focus: _findPillOrTextNode(focusNode),
+  }
+}
+
+/**
+ * Returns an array containing the start, end items and all elements in-between
+ * @param {{ start: Element, end: Element, list: Element[] }}} param0
+ */
+function getElementsBetween({ start, end, list }) {
+  const startIndex = list.indexOf(start)
+  const endIndex = list.indexOf(end)
+
+  if (startIndex === endIndex) {
+    return [list[startIndex]]
+  }
+
+  return startIndex > endIndex
+    ? list.slice(endIndex, startIndex + 1)
+    : list.slice(startIndex, endIndex + 1)
+}
+
 export {
   removeMetaAtGivenIndex,
   splitTextMetaNodes,
+  parseSelection,
+  getElementsBetween,
 }

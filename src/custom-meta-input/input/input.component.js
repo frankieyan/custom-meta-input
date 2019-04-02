@@ -119,7 +119,7 @@ const Input = ({ value, onChange }) => {
       tabIndex="0"
       onKeyDown={handleInputKeyDown}
       onMouseDown={handleClearSelection}
-      onMouseUp={handleSelection}
+      onMouseMove={handleSelection}
       onDoubleClick={handleSelection}
     >
       {

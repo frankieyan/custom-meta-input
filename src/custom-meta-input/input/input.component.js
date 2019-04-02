@@ -36,7 +36,7 @@ const TextInput = styled.div`
     border-color: lightblue;
 
     &:after {
-      content: '';
+      content: ${({ hasSelection }) => hasSelection ? 'none' : '\'\''};
       height: 14px;
       width: 1px;
       background: black;
@@ -143,6 +143,7 @@ const Input = ({ value, onChange }) => {
       onMouseMove={handleSelection}
       onBlur={handleClearSelection}
       onDoubleClick={handleSelection}
+      hasSelection={!!selectedIndexes.length}
     >
       {
         textMetaNodes.map((node, index) => {

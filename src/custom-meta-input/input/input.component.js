@@ -90,6 +90,7 @@ const Input = ({ value, onChange }) => {
     }
 
     window.getSelection().removeAllRanges()
+    setSelectedIndexes([])
   }
 
   function handleSelection() {
@@ -120,6 +121,7 @@ const Input = ({ value, onChange }) => {
       onKeyDown={handleInputKeyDown}
       onMouseDown={handleClearSelection}
       onMouseMove={handleSelection}
+      onBlur={handleClearSelection}
       onDoubleClick={handleSelection}
     >
       {

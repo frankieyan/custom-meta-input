@@ -81,6 +81,26 @@ const Input = ({ value, onChange }) => {
   }
 
   function handleDeleteText() {
+    if (selectedNodeData.length) {
+      const textMetaNodes = splitTextMetaNodes(value)
+      const newValue = textMetaNodes.map((node, index) => {
+        const selectedData = selectedNodeData.find(selected => index === selected.index)
+
+        if (typeof selectedData === 'undefined') {
+          return node.rawValue || node
+        }
+
+        if (selectedData && !selectedData.partial) {
+          return ''
+        }
+
+        return node.substring(0, selectedData.startIndex) + node.substring(selectedData.endIndex)
+      }).join('')
+
+      onChange(newValue)
+      return handleClearSelection()
+    }
+
     const valueWithoutMeta = removeMetaAtGivenIndex(value, value.length - 1)
 
     onChange(
@@ -96,40 +116,44 @@ const Input = ({ value, onChange }) => {
     }
 
     window.getSelection().removeAllRanges()
-    setSelectedIndexes([])
+    setSelectedNodeData([])
   }
 
   function handleSelection() {
     if (!window.getSelection || window.getSelection().isCollapsed) {
-      return setSelectedIndexes([])
+      return setSelectedNodeData([])
     }
 
     const textMetaNodes = splitTextMetaNodes(value)
     const selection = window.getSelection()
     const { anchorNode, focusNode, focusOffset, anchorOffset } = selection
-    const selectedText = selection.toString()
     const { anchor, focus } = parseSelection({ anchorNode, focusNode })
     const { anchorIsFirst, elementsBetween: currentSelectedElements } = getElementsBetween({ start: anchor, end: focus, list: currentTextMetaNodeRefs })
 
     const currentSelectedIndexes = currentSelectedElements.map(selected => currentTextMetaNodeRefs.indexOf(selected))
     const currentSelectedNodes = currentSelectedIndexes.map(index => textMetaNodes[index])
-    const currentSelectedValue = currentSelectedNodes.map((node, index, list) =>
-      typeof node === 'string'
-        ? getPartiallySelectedText({
-            anchorIsFirst,
-            currentIndex: index,
-            totalSelectedElements: list.length,
-            fullText: node,
-            anchorOffset,
-            focusOffset,
-          })
-        : node.value || node
-    )
+    const currentSelectedNodeData = currentSelectedNodes.map((node, index, list) => (
+      {
+        ...(
+          typeof node === 'string'
+            ? getPartiallySelectedText({
+                anchorIsFirst,
+                currentIndex: index,
+                totalSelectedElements: list.length,
+                fullText: node,
+                anchorOffset,
+                focusOffset,
+              })
+            : node
+        ),
+        index: currentSelectedIndexes[index],
+      }
+    ))
 
-    setSelectedIndexes(currentSelectedIndexes)
+    setSelectedNodeData(currentSelectedNodeData)
   }
 
-  const [selectedIndexes, setSelectedIndexes] = useState([])
+  const [selectedNodeData, setSelectedNodeData] = useState([])
   const textMetaNodes = splitTextMetaNodes(value)
 
   const currentTextMetaNodeRefs = useRef([]).current
@@ -143,7 +167,7 @@ const Input = ({ value, onChange }) => {
       onMouseMove={handleSelection}
       onBlur={handleClearSelection}
       onDoubleClick={handleSelection}
-      hasSelection={!!selectedIndexes.length}
+      hasSelection={!!selectedNodeData.length}
     >
       {
         textMetaNodes.map((node, index) => {
@@ -153,7 +177,8 @@ const Input = ({ value, onChange }) => {
               currentTextMetaNodeRefs.push(ref)
             }
           }
-          const isSelected = selectedIndexes.includes(index)
+
+          const isSelected = selectedNodeData.find(nodeData => nodeData.index === index)
 
           return typeof node === 'object'
             ? <Pill key={index} type={type} value={nodeValue} data-pill-element ref={setRef} selected={isSelected} />

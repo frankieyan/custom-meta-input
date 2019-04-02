@@ -90,18 +90,61 @@ function parseSelection({ anchorNode, focusNode }) {
 /**
  * Returns an array containing the start, end items and all elements in-between
  * @param {{ start: Element, end: Element, list: Element[] }}} param0
+ * @returns {{ anchorIsFirst: boolean | null, elementsBetween: Element[] }}
  */
 function getElementsBetween({ start, end, list }) {
   const startIndex = list.indexOf(start)
   const endIndex = list.indexOf(end)
 
   if (startIndex === endIndex) {
-    return [list[startIndex]]
+    return { anchorIsFirst: null, elementsBetween: [list[startIndex]] }
   }
 
-  return startIndex > endIndex
-    ? list.slice(endIndex, startIndex + 1)
-    : list.slice(startIndex, endIndex + 1)
+  const anchorIsFirst = startIndex < endIndex
+
+  const elementsBetween = anchorIsFirst
+    ? list.slice(startIndex, endIndex + 1)
+    : list.slice(endIndex, startIndex + 1)
+
+  return { anchorIsFirst, elementsBetween }
+}
+
+/**
+ * Extract the partially selected text based on the provided selection anchor and focus
+ * @param {{
+ *  anchorIsFirst: boolean,
+ *  currentIndex: number,
+ *  totalSelectedElements: number,
+ *  fullText: string,
+ *  anchorOffset: number,
+ *  focusOffset: number,
+ * }} param0
+ * @returns string
+ */
+function getPartiallySelectedText({ anchorIsFirst, currentIndex, totalSelectedElements, fullText, anchorOffset, focusOffset }) {
+  const isFirst = currentIndex === 0
+  const isLast = currentIndex === totalSelectedElements - 1
+  const isOnlyElement = isFirst && isLast
+  const isAnchor = anchorIsFirst ? isFirst : isLast
+  const isFocus = anchorIsFirst ? isLast : isFirst
+
+  if (isOnlyElement) {
+    return anchorOffset > focusOffset
+      ? fullText.slice(focusOffset, anchorOffset)
+      : fullText.slice(anchorOffset, focusOffset)
+  }
+
+  if (isAnchor) {
+    return isFirst
+      ? fullText.slice(anchorOffset)
+      : fullText.slice(0, anchorOffset)
+  }
+
+  if (isFocus) {
+    return isFirst
+      ? fullText.slice(focusOffset)
+      : fullText.slice(0, focusOffset)
+  }
 }
 
 export {
@@ -109,4 +152,5 @@ export {
   splitTextMetaNodes,
   parseSelection,
   getElementsBetween,
+  getPartiallySelectedText,
 }

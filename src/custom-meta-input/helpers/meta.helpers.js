@@ -15,7 +15,7 @@ function _parseMeta(meta) {
     .replace(/{|}/g, '')
     .split('__')
 
-  return { type: parsedParts[0], value: parsedParts[1] }
+  return { type: parsedParts[0], value: parsedParts[1], rawValue: meta }
 }
 
 function removeMetaAtGivenIndex(value, index) {
@@ -29,6 +29,10 @@ function removeMetaAtGivenIndex(value, index) {
   return value.slice(0, start) + value.slice(end + 1)
 }
 
+/**
+ * @param {string} value
+ * @returns {({ type: string, value: string, rawValue: string } | string)[]}
+ */
 function splitTextMetaNodes(value = '') {
   function findNextTextMetaNode(accumulator, source) {
     if (source.length === 0) {
@@ -114,7 +118,7 @@ function getElementsBetween({ start, end, list }) {
 }
 
 /**
- * Extract the partially selected text based on the provided selection anchor and focus
+ * Extract the partially selected text and provide data like start/end indices based on the provided selection anchor and focus
  * @param {{
  *  anchorIsFirst: boolean,
  *  currentIndex: number,
@@ -123,32 +127,30 @@ function getElementsBetween({ start, end, list }) {
  *  anchorOffset: number,
  *  focusOffset: number,
  * }} param0
- * @returns string
+ * @returns {{ partial: true, rawValue: string, startIndex: number, endIndex: number, index: number }}
  */
-function getPartiallySelectedText({ anchorIsFirst, currentIndex, totalSelectedElements, fullText, anchorOffset, focusOffset }) {
+function getPartiallySelectedTextData({ anchorIsFirst, currentIndex, totalSelectedElements, fullText, anchorOffset, focusOffset }) {
   const isFirst = currentIndex === 0
   const isLast = currentIndex === totalSelectedElements - 1
   const isOnlyElement = isFirst && isLast
   const isAnchor = anchorIsFirst ? isFirst : isLast
   const isFocus = anchorIsFirst ? isLast : isFirst
+  let startIndex
+  let endIndex
 
   if (isOnlyElement) {
-    return anchorOffset > focusOffset
-      ? fullText.slice(focusOffset, anchorOffset)
-      : fullText.slice(anchorOffset, focusOffset)
+    const focusIsFirst = anchorOffset > focusOffset
+    startIndex = focusIsFirst ? focusOffset : anchorOffset
+    endIndex = focusIsFirst ? anchorOffset : focusOffset
+  } else if (isAnchor) {
+    startIndex = isFirst ? anchorOffset : 0
+    endIndex = isFirst ? fullText.length : anchorOffset
+  } else if (isFocus) {
+    startIndex = isFirst ? focusOffset : 0
+    endIndex = isFirst ? fullText.length : focusOffset
   }
 
-  if (isAnchor) {
-    return isFirst
-      ? fullText.slice(anchorOffset)
-      : fullText.slice(0, anchorOffset)
-  }
-
-  if (isFocus) {
-    return isFirst
-      ? fullText.slice(focusOffset)
-      : fullText.slice(0, focusOffset)
-  }
+  return { partial: true, rawValue: fullText.slice(startIndex, endIndex), startIndex, endIndex }
 }
 
 export {
@@ -156,5 +158,5 @@ export {
   splitTextMetaNodes,
   parseSelection,
   getElementsBetween,
-  getPartiallySelectedText,
+  getPartiallySelectedTextData as getPartiallySelectedText,
 }

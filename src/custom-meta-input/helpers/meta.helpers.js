@@ -96,6 +96,10 @@ function getElementsBetween({ start, end, list }) {
   const startIndex = list.indexOf(start)
   const endIndex = list.indexOf(end)
 
+  if (startIndex === -1 || endIndex === -1) {
+    return { anchorIsFirst: null, elementsBetween: [] }
+  }
+
   if (startIndex === endIndex) {
     return { anchorIsFirst: null, elementsBetween: [list[startIndex]] }
   }

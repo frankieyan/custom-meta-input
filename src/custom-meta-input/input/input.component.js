@@ -1,7 +1,13 @@
 import React, { useRef, useState } from 'react'
 import styled, { keyframes } from 'styled-components'
-import { removeMetaAtGivenIndex, splitTextMetaNodes, parseSelection, getElementsBetween } from '../helpers/meta.helpers'
 import { Pill } from './pill.component'
+import {
+  removeMetaAtGivenIndex,
+  splitTextMetaNodes,
+  parseSelection,
+  getElementsBetween,
+  getPartiallySelectedText,
+} from '../helpers/meta.helpers'
 
 const caretAnimation = keyframes`
   0% { visibility: visible; }
@@ -98,13 +104,27 @@ const Input = ({ value, onChange }) => {
       return setSelectedIndexes([])
     }
 
+    const textMetaNodes = splitTextMetaNodes(value)
     const selection = window.getSelection()
-    const { anchorNode, focusNode } = selection
+    const { anchorNode, focusNode, focusOffset, anchorOffset } = selection
     const selectedText = selection.toString()
-
     const { anchor, focus } = parseSelection({ anchorNode, focusNode })
-    const currentSelectedElements = getElementsBetween({ start: anchor, end: focus, list: currentTextMetaNodeRefs })
+    const { anchorIsFirst, elementsBetween: currentSelectedElements } = getElementsBetween({ start: anchor, end: focus, list: currentTextMetaNodeRefs })
+
     const currentSelectedIndexes = currentSelectedElements.map(selected => currentTextMetaNodeRefs.indexOf(selected))
+    const currentSelectedNodes = currentSelectedIndexes.map(index => textMetaNodes[index])
+    const currentSelectedValue = currentSelectedNodes.map((node, index, list) =>
+      typeof node === 'string'
+        ? getPartiallySelectedText({
+            anchorIsFirst,
+            currentIndex: index,
+            totalSelectedElements: list.length,
+            fullText: node,
+            anchorOffset,
+            focusOffset,
+          })
+        : node.value || node
+    )
 
     setSelectedIndexes(currentSelectedIndexes)
   }

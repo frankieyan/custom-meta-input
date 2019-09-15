@@ -49,17 +49,22 @@ const TextNode = styled.span`
 `
 
 const Input = ({ value, onChange }) => {
-  function handleInputKeyDown({ key }) {
+  function handleInputKeyDown(event) {
+    const { key } = event
+
     switch (key) {
       case 'Backspace':
+        event.stopPropagation()
         return handleDeleteText()
       case ' ':
+        event.stopPropagation()
         return handleTextInput(key)
       default:
         break
       }
 
     if (/^.{1}$/.test(key)) {
+      event.stopPropagation()
       return handleTextInput(key)
     }
   }

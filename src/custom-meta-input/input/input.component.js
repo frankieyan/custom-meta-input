@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { Pill } from './pill.component'
+import { TextNode } from './text-node.component'
 import {
   removeMetaAtGivenIndex,
   splitTextMetaNodes,
@@ -44,10 +45,6 @@ const TextInput = styled.div`
       animation: ${caretAnimation} 1s linear infinite;
     }
   }
-`
-
-const TextNode = styled.span`
-  white-space: pre;
 `
 
 const Input = ({ value, onChange }) => {

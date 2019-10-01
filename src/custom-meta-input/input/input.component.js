@@ -47,11 +47,7 @@ const TextInput = styled.div`
 `
 
 const TextNode = styled.span`
-  white-space: nowrap;
-
-  :not(:last-child) {
-    margin-right: 4px;
-  }
+  white-space: pre;
 `
 
 const Input = ({ value, onChange }) => {

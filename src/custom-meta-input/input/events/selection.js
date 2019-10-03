@@ -1,3 +1,5 @@
+import { PILL_NODE_IDENTIFIER, TEXT_NODE_IDENTIFIER } from '../input.constants'
+
 function getSelectedNodes({ availableElements, availableNodes }) {
   if (!window.getSelection || window.getSelection().isCollapsed) {
     return []
@@ -36,11 +38,11 @@ function getSelectedNodes({ availableElements, availableNodes }) {
  * @returns {Element}
  */
 function _findPillOrTextNode(element) {
-  if (element.hasAttribute && element.hasAttribute('data-input-element') || !element.parentElement) {
+  if (!element.parentElement) {
     return
   }
 
-  return element.hasAttribute && (element.hasAttribute('data-pill-element') || element.hasAttribute('data-text-node-element'))
+  return element.hasAttribute && (element.hasAttribute(PILL_NODE_IDENTIFIER) || element.hasAttribute(TEXT_NODE_IDENTIFIER))
     ? element
     : _findPillOrTextNode(element.parentElement)
 }

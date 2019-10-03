@@ -106,8 +106,8 @@ const Input = ({ value, onChange }) => {
           const isSelected = selectedNodeData.find(nodeData => nodeData.index === index)
 
           return typeof node === 'object'
-            ? <Pill key={index} type={type} value={nodeValue} data-pill-element ref={setRef} selected={isSelected} />
-            : <TextNode key={index} data-text-node-element ref={setRef}>{node}</TextNode>
+            ? <Pill key={index} type={type} value={nodeValue} ref={setRef} selected={isSelected} />
+            : <TextNode key={index} ref={setRef}>{node}</TextNode>
         })
       }
     </TextInput>

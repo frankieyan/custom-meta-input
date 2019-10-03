@@ -1,8 +1,9 @@
 import React, { forwardRef } from 'react'
 import styled from 'styled-components'
+import { PILL_NODE_IDENTIFIER } from './input.constants'
 
 const Pill = styled(forwardRef(({ type, value, className, selected, ...rest }, ref) => (
-  <span className={className} ref={ref} {...rest}>
+  <span className={className} ref={ref} {...{ [PILL_NODE_IDENTIFIER]: true }} {...rest}>
     <span>{type}</span>
     <strong>{value}</strong>
   </span>

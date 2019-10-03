@@ -24,7 +24,7 @@ describe('#getSelectedNodes', () => {
     ]
     const markup = renderToStaticMarkup(
       <React.Fragment>
-        {nodes.map(({ type, value }) => <Pill key={value} type={type} value={value} data-pill-element/>)}
+        {nodes.map(({ type, value }) => <Pill key={value} type={type} value={value} />)}
       </React.Fragment>
     )
 
@@ -98,7 +98,7 @@ describe('#getSelectedNodes', () => {
     ]
     const markup = renderToStaticMarkup(
       <React.Fragment>
-        {nodes.map(node => <TextNode key={node} data-text-node-element>{node}</TextNode>)}
+        {nodes.map(node => <TextNode key={node}>{node}</TextNode>)}
       </React.Fragment>
     )
 
@@ -205,8 +205,8 @@ describe('#getSelectedNodes', () => {
     const markup = renderToStaticMarkup(
       <React.Fragment>
         {nodes.map(node => typeof node === 'string'
-          ? <TextNode key={node} data-text-node-element>{node}</TextNode>
-          : <Pill key={node.value} type={node.type} value={node.value} data-pill-element/>
+          ? <TextNode key={node} >{node}</TextNode>
+          : <Pill key={node.value} type={node.type} value={node.value} />
         )}
       </React.Fragment>
     )

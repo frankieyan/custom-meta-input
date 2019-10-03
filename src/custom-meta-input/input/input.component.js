@@ -5,10 +5,8 @@ import { TextInput } from './text-input.component'
 import {
   removeMetaAtGivenIndex,
   splitTextMetaNodes,
-  parseSelection,
-  getElementsBetween,
-  getPartiallySelectedText,
 } from '../helpers/meta.helpers'
+import { getSelectedNodes } from './events/selection'
 
 const Input = ({ value, onChange }) => {
   function handleInputKeyDown(event) {
@@ -76,37 +74,8 @@ const Input = ({ value, onChange }) => {
   }
 
   function handleSelection() {
-    if (!window.getSelection || window.getSelection().isCollapsed) {
-      return setSelectedNodeData([])
-    }
-
-    const textMetaNodes = splitTextMetaNodes(value)
-    const selection = window.getSelection()
-    const { anchorNode, focusNode, focusOffset, anchorOffset } = selection
-    const { anchor, focus } = parseSelection({ anchorNode, focusNode })
-    const { anchorIsFirst, elementsBetween: currentSelectedElements } = getElementsBetween({ start: anchor, end: focus, list: currentTextMetaNodeRefs })
-
-    const currentSelectedIndexes = currentSelectedElements.map(selected => currentTextMetaNodeRefs.indexOf(selected))
-    const currentSelectedNodes = currentSelectedIndexes.map(index => textMetaNodes[index])
-    const currentSelectedNodeData = currentSelectedNodes.map((node, index, list) => (
-      {
-        ...(
-          typeof node === 'string'
-            ? getPartiallySelectedText({
-                anchorIsFirst,
-                currentIndex: index,
-                totalSelectedElements: list.length,
-                fullText: node,
-                anchorOffset,
-                focusOffset,
-              })
-            : node
-        ),
-        index: currentSelectedIndexes[index],
-      }
-    ))
-
-    setSelectedNodeData(currentSelectedNodeData)
+    const selectedNodes = getSelectedNodes({ availableElements: currentTextMetaNodeRefs, availableNodes: splitTextMetaNodes(value) })
+    setSelectedNodeData(selectedNodes)
   }
 
   const [selectedNodeData, setSelectedNodeData] = useState([])

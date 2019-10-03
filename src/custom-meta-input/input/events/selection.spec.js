@@ -119,9 +119,9 @@ describe('#getSelectedNodes', () => {
       })
 
       expect(result).toEqual([
-        { index: 0, rawValue: 'Hello', startIndex: 0, endIndex: 5, partial: true },
-        { index: 1, rawValue: 'Is it me you\'re looking for?', startIndex: undefined, endIndex: undefined, partial: true },
-        { index: 2, rawValue: 'Cause I wonder where you are', startIndex: 0, endIndex: 28, partial: true },
+        { index: 0, rawValue: 'Hello', startIndex: 0, endIndex: 5, partial: false },
+        { index: 1, rawValue: 'Is it me you\'re looking for?', startIndex: 0, endIndex: 28, partial: false },
+        { index: 2, rawValue: 'Cause I wonder where you are', startIndex: 0, endIndex: 28, partial: false },
       ])
     })
 
@@ -142,8 +142,8 @@ describe('#getSelectedNodes', () => {
       })
 
       expect(result).toEqual([
-        { index: 1, rawValue: 'Is it me you\'re looking for?', startIndex: 0, endIndex: 28, partial: true },
-        { index: 2, rawValue: 'Cause I wonder where you are', startIndex: 0, endIndex: 28, partial: true },
+        { index: 1, rawValue: 'Is it me you\'re looking for?', startIndex: 0, endIndex: 28, partial: false },
+        { index: 2, rawValue: 'Cause I wonder where you are', startIndex: 0, endIndex: 28, partial: false },
       ])
     })
 
@@ -228,13 +228,13 @@ describe('#getSelectedNodes', () => {
       })
 
       expect(result).toEqual([
-        { index: 0, rawValue: 'Hello', startIndex: 0, endIndex: 5, partial: true },
+        { index: 0, rawValue: 'Hello', startIndex: 0, endIndex: 5, partial: false },
         { index: 1, type: 'Artist', value: 'Lionel Richie' },
-        { index: 2, rawValue: 'Is it me you\'re looking for?', startIndex: undefined, endIndex: undefined, partial: true },
+        { index: 2, rawValue: 'Is it me you\'re looking for?', startIndex: 0, endIndex: 28, partial: false },
         { index: 3, type: 'Song', value: 'Hello' },
-        { index: 4, rawValue: 'Cause I wonder where you are', startIndex: undefined, endIndex: undefined, partial: true },
+        { index: 4, rawValue: 'Cause I wonder where you are', startIndex: 0, endIndex: 28, partial: false },
         { index: 5, type: 'Rating', value: '5' },
-        { index: 6, rawValue: 'And I wonder what you do', startIndex: 0, endIndex: 25, partial: true },
+        { index: 6, rawValue: 'And I wonder what you do', startIndex: 0, endIndex: 25, partial: false },
       ])
     })
 

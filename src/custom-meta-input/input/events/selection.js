@@ -83,7 +83,7 @@ function _getElementsBetween({ start, end, list }) {
   *  anchorOffset: number,
   *  focusOffset: number,
   * }} param0
-  * @returns {{ partial: true, rawValue: string, startIndex: number, endIndex: number, index: number }}
+  * @returns {{ partial: boolean, rawValue: string, startIndex: number, endIndex: number, index: number }}
   */
  function _getPartiallySelectedTextData({ anchorIsFirst, currentIndex, totalSelectedElements, fullText, anchorOffset, focusOffset }) {
    const isFirst = currentIndex === 0
@@ -91,8 +91,8 @@ function _getElementsBetween({ start, end, list }) {
    const isOnlyElement = isFirst && isLast
    const isAnchor = anchorIsFirst ? isFirst : isLast
    const isFocus = anchorIsFirst ? isLast : isFirst
-   let startIndex
-   let endIndex
+   let startIndex = 0
+   let endIndex = 0
 
    if (isOnlyElement) {
      const focusIsFirst = anchorOffset > focusOffset
@@ -104,9 +104,12 @@ function _getElementsBetween({ start, end, list }) {
    } else if (isFocus) {
      startIndex = isFirst ? focusOffset : 0
      endIndex = isFirst ? fullText.length : focusOffset
+   } else {
+     startIndex = 0
+     endIndex = fullText.length
    }
 
-   return { partial: true, rawValue: fullText.slice(startIndex, endIndex), startIndex, endIndex }
+   return { partial: startIndex > 0 || endIndex < fullText.length, rawValue: fullText.slice(startIndex, endIndex), startIndex, endIndex }
  }
 
 export {

@@ -1,7 +1,7 @@
 {
   "name": "custom-meta-input",
-  "version": "0.0.1",
-  "description": "An input component largely inspired by Zapier's setup flow",
+  "version": "0.1.0",
+  "description": "An input/combobox component allowing you to combine user input and user-selected meta data",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "author": "Frankie Yan <frankieyan@gmail.com>",

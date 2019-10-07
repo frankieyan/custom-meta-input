@@ -16,6 +16,29 @@ describe('#getSelectedNodes', () => {
     expect(getSelectedNodes({})).toEqual([])
   })
 
+  test('returns an empy array when the selected elements is not within the given elements', () => {
+    const nodes = ['Hello']
+    const markup = renderToStaticMarkup(
+      <React.Fragment>
+        <TextNode>Hello</TextNode>
+      </React.Fragment>
+    )
+    const fragment = document.createElement('div')
+    fragment.innerHTML = markup
+    window.getSelection.mockReturnValue({
+      isCollapsed: false,
+      anchorNode: fragment,
+      focusNode: fragment,
+    })
+
+    const result = getSelectedNodes({
+      availableElements: [...fragment.childNodes],
+      availableNodes: nodes,
+    })
+
+    expect(result).toEqual([])
+  })
+
   describe('when only pills are present', () => {
     const nodes = [
       { type: 'Artist', value: 'Commodores' },
@@ -188,6 +211,36 @@ describe('#getSelectedNodes', () => {
       expect(result).toEqual([
         { index: 0, rawValue: 'ello', startIndex: 1, endIndex: 5, partial: true },
         { index: 1, rawValue: 'Is it me you', startIndex: 0, endIndex: 12, partial: true },
+      ])
+    })
+  })
+
+  describe('when only one text node is present', () => {
+    const nodes = ['Hello']
+    const markup = renderToStaticMarkup(
+      <React.Fragment>
+        <TextNode>Hello</TextNode>)}
+      </React.Fragment>
+    )
+
+    test('returns the selected textnode data', () => {
+      const fragment = document.createElement('div')
+      fragment.innerHTML = markup
+      window.getSelection.mockReturnValue({
+        isCollapsed: false,
+        anchorNode: fragment.childNodes[0],
+        focusNode: fragment.childNodes[0],
+        anchorOffset: 1,
+        focusOffset: 4,
+      })
+
+      const result = getSelectedNodes({
+        availableElements: [...fragment.childNodes],
+        availableNodes: nodes,
+      })
+
+      expect(result).toEqual([
+        { index: 0, rawValue: 'ell', startIndex: 1, endIndex: 4, partial: true },
       ])
     })
   })
